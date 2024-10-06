@@ -45,6 +45,7 @@ function register() {
   userPassword: userPassword.value,
   userTasks: [],
   };
+  console.log(newUser);
   userStore.createUser(newUser);
   userStore.loggedUser = newUser;
   userName.value = "";

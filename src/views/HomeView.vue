@@ -45,7 +45,7 @@
 import { useTaskStore } from '@/stores/taskStore';
 import type { Task } from '@/stores/taskStore';
 import { useUserStore } from '@/stores/userStore';
-import { ref } from 'vue';
+import { onUpdated, ref } from 'vue';
 import TaskItem from '@/components/TaskItem.vue';
 
 const taskStore = useTaskStore();
@@ -69,16 +69,16 @@ function newTask() {
     taskBody.value = '';
     startDate.value = new Date;
     endDate.value = new Date;
-    
+    window.location.reload()
 }
 
 const completedTasks = taskStore.getCompletedTasks;
 
 const tasks = taskStore.getTasks;
 
-function toggleTaskCompletion(index: number) {
-  taskStore.toggleCompleted(index);
-}
+// function toggleTaskCompletion(index: number) {
+//   taskStore.toggleCompleted(index);
+// }
 
 </script>
 

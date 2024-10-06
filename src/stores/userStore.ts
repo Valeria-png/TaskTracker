@@ -18,10 +18,12 @@ export const useUserStore = defineStore("user", {
     }),
     actions: {
         createUser(user: User) {
+            console.log(user);
             this.users.push(user); 
             this.loggedUser = {} as User;
             this.loggedUser = user;
             this.isLogged = true;
+            console.log(this.users);
             router.push('/home');
         },
         loginUser(user: User) {

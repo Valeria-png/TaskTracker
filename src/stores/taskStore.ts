@@ -18,19 +18,12 @@ export const useTaskStore = defineStore("task", {
             this.userLogged.userTasks.push(task)
         },
         deleteTask(index: number) {
-            if (index > -1 && index < this.userLogged.userTasks.length) {
-              this.userLogged.userTasks.splice(index, 1); 
-            } else {
-              console.error('Invalid index: ', index);
-            }
+            this.userLogged.userTasks.splice(index, 1);
+
           },
         toggleCompleted(index: number) {
-        if (index > -1 && index < this.userLogged.userTasks.length) {
             const task = this.userLogged.userTasks[index];
-            task.completed = !task.completed; // Toggle the completed state
-        } else {
-            console.error('Invalid index: ', index);
-        }
+            task.completed = !task.completed;
         },
     },
     getters: {

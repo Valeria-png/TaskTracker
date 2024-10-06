@@ -2,7 +2,7 @@
     <div class="flex flex-col p-2 m-3">
         <div class="flex justify-between w-full">
             <div class="flex">
-                <input type="checkbox" class="checkbox checkbox-error" v-model="isChecked" @change="" >
+                <input type="checkbox" class="checkbox checkbox-error" v-model="isChecked" @change="taskComplete" >
                 <p class="text-wrap px-2">{{ taskBody }}</p> 
             </div>
 
@@ -40,7 +40,14 @@ function handleCompletion() {
 
 function deleteTask() {
     taskStore.deleteTask(props.index);
+    window.location.reload()
 }
+
+function taskComplete(){
+    taskStore.toggleCompleted(props.index)
+    window.location.reload()
+}
+
 
 
 
