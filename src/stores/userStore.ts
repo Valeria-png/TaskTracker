@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import type { Task } from "./taskStore";
 import router from "@/router";
 
-
 export interface User {
     userName: string
     userUsername: string
@@ -18,12 +17,10 @@ export const useUserStore = defineStore("user", {
     }),
     actions: {
         createUser(user: User) {
-            console.log(user);
             this.users.push(user); 
             this.loggedUser = {} as User;
             this.loggedUser = user;
             this.isLogged = true;
-            console.log(this.users);
             router.push('/home');
         },
         loginUser(user: User) {
@@ -35,6 +32,7 @@ export const useUserStore = defineStore("user", {
         logoutUser() {
             this.isLogged = false
             this.loggedUser = {} as User;
+            console.log(this.loggedUser);
             router.push('/')
         }
     },

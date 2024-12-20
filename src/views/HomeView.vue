@@ -26,10 +26,10 @@
                   <input type="checkbox" />
                   <div class="collapse-title text-xl font-medium bg-[#A8DADC]">Terminados</div>
                   <div class="collapse-content bg-[#A8DADC]">
-                    <TaskItem v-for="(task,index) in completedTasks" :key="index" :taskBody="task.taskBody" :category="task.category" :completed="task.completed" :startDate="task.startDate" :endDate="task.endDate" :index="index" @task-completed="toggleTaskCompletion"></TaskItem>
+                    <TaskItem v-for="(task,index) in completedTasks" :key="index" :taskBody="task.taskBody" :category="task.category" :completed="task.completed" :startDate="task.startDate" :endDate="task.endDate" :index="index" ></TaskItem>
                   </div>
               </div>
-              <button class="btn cerrar my-3 text-[#E63946] " @click="useUserStore().logoutUser()">Cerrar Sesión</button>
+              <button class="btn cerrar my-3 text-[#E63946] " @click="userStore.logoutUser()">Cerrar Sesión</button>
           </div>
           <div class="h-full w-4/6 p-4">
                 <h1>Tareas de {{ loggedUser.userName }} </h1>
@@ -44,18 +44,30 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/taskStore';
 import type { Task } from '@/stores/taskStore';
+import type {User} from '@/stores/userStore';
 import { useUserStore } from '@/stores/userStore';
-import { onUpdated, ref } from 'vue';
+import { onUpdated, ref, onMounted } from 'vue';
 import TaskItem from '@/components/TaskItem.vue';
 
 const taskStore = useTaskStore();
-
+const userStore = useUserStore();
+const loggedUser = ref({} as User);
 const category = ref('');
 const taskBody = ref('');
 const startDate = ref(new Date);
 const endDate = ref(new Date);
 const completed = ref(false);
-const loggedUser = useUserStore().loggedUser;
+const completedTasks = ref([] as Task[])
+const tasks = ref([] as Task[])
+
+onMounted(() => {
+    loggedUser.value = userStore.loggedUser; 
+    console.log(loggedUser);
+    tasks.value = userStore.loggedUser.userTasks.filter(t => t.completed === false);
+    console.log(tasks);
+    completedTasks.value = userStore.loggedUser.userTasks.filter(t => t.completed === true);
+})
+
 
 function newTask() {
     taskStore.addTask({
@@ -64,7 +76,7 @@ function newTask() {
     startDate: startDate.value,
     endDate: endDate.value,
     completed: completed.value
-    })
+    },loggedUser.value)
     category.value = '';
     taskBody.value = '';
     startDate.value = new Date;
@@ -72,13 +84,7 @@ function newTask() {
     window.location.reload()
 }
 
-const completedTasks = taskStore.getCompletedTasks;
 
-const tasks = taskStore.getTasks;
-
-// function toggleTaskCompletion(index: number) {
-//   taskStore.toggleCompleted(index);
-// }
 
 </script>
 

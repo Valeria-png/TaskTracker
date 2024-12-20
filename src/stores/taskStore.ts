@@ -10,25 +10,18 @@ export interface Task {
     completed: Boolean
 }
 export const useTaskStore = defineStore("task", {
-    state: () => ({
-        userLogged: useUserStore().loggedUser
-    }),
     actions: {
-        addTask(task: Task) {
-            this.userLogged.userTasks.push(task)
+        addTask(task: Task, userLogged: User) {
+            userLogged.userTasks.push(task)
         },
-        deleteTask(index: number) {
-            this.userLogged.userTasks.splice(index, 1);
+        deleteTask(index: number, userLogged: User) {
+            userLogged.userTasks.splice(index, 1);
 
           },
-        toggleCompleted(index: number) {
-            const task = this.userLogged.userTasks[index];
+        toggleCompleted(index: number, userLogged: User) {
+            const task = userLogged.userTasks[index];
             task.completed = !task.completed;
         },
-    },
-    getters: {
-        getTasks: (state) => state.userLogged.userTasks.filter(t => t.completed === false),
-        getCompletedTasks: (state) => state.userLogged.userTasks.filter(t => t.completed === true),
     },
     persist: true,
 });

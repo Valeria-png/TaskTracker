@@ -16,9 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref,defineProps, defineEmits } from 'vue';
+import { ref,defineProps, defineEmits, onMounted } from 'vue';
 import { useTaskStore } from '@/stores/taskStore';
-import type { Task } from '@/stores/taskStore';
+import { useUserStore } from '@/stores/userStore';
+import type {User} from '@/stores/userStore';
+
 name: 'TaskItem'
 const props =defineProps({
     taskBody: String,
@@ -32,19 +34,19 @@ const props =defineProps({
 const isChecked = ref(props.completed);
 
 const taskStore = useTaskStore();
-const emit = defineEmits(['task-checked']); 
-function handleCompletion() {
-  // Emit the task-completed event with the index and the new completed state
-  emit('task-checked', props.index, isChecked.value);
-}
+const userStore = useUserStore();
+const loggedUser = ref({} as User);
+onMounted(() => {
+    loggedUser.value = userStore.loggedUser;
+})
 
 function deleteTask() {
-    taskStore.deleteTask(props.index);
+    taskStore.deleteTask(props.index, loggedUser.value);
     window.location.reload()
 }
 
 function taskComplete(){
-    taskStore.toggleCompleted(props.index)
+    taskStore.toggleCompleted(props.index, loggedUser.value);
     window.location.reload()
 }
 
